@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "npx ts-node-dev --respawn --transpile-only src/server/start.ts",
-    "db:reset": "npx ts-node src/db/setupDB.ts"
+    "db:reset": "npx ts-node src/db/resetDB.ts"
   },
   "keywords": [],
   "author": "",

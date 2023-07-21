@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { Pool } from "pg";
 
+console.log("Setting up pool", process.env.DATABASE_URL);
 if (!process.env.DATABASE_URL) {
   throw new Error("Missing env var: DATABASE_URL");
 }
