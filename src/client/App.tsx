@@ -1,16 +1,16 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import { Navigation } from "./components/Navigation";
+import { Catalog } from "./pages/Catalog";
+import { Homepage } from "./pages/Homepage";
 
 function App() {
   return (
     <div className="App">
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/catalog">Catalog</Link>
-      </nav>
+      <Navigation />
       <Routes>
-        <Route path="/" element={<div>Home</div>} />
-        <Route path="/catalog" element={<div>Catalog</div>} />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/catalog" element={<Catalog />} />
       </Routes>
     </div>
   );
