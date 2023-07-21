@@ -10,7 +10,7 @@ const port = parseInt(process.env.PORT || "3000");
 app.use(volleyball);
 
 app.get("/test", (req, res) => {
-  res.send("The sedulous hyena ate the antelope!");
+  res.send("Changing code reloads :)");
 });
 
 ViteExpress.listen(app, port, () => {
