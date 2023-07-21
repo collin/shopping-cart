@@ -10,4 +10,10 @@ export const pool = new Pool({
   max: 10,
   min: 1,
   idleTimeoutMillis: 5000,
+  allowExitOnIdle: true,
+});
+
+pool.on("error", (err) => {
+  console.error("Unexpected pg error", err);
+  process.exit(1);
 });
