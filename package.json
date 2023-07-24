@@ -26,6 +26,7 @@
     "husky": "^8.0.0",
     "jsdom": "^22.1.0",
     "kanel": "^3.4.3",
+    "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6",
