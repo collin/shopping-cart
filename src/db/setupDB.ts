@@ -1,6 +1,9 @@
 import { execQuery } from "./execQuery";
+import { createDB } from "./createDB";
 
 export async function setupDB() {
+  await createDB();
+
   // drop existing tables/schema
   await execQuery(/* SQL */ `
     DROP SCHEMA IF EXISTS store CASCADE;
