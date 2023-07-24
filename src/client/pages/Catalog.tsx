@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Products from "../../types/store/Products";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import Categories from "../../types/store/Categories";
+import { useUpdatableSearchParams } from "../hooks/useUpdatableSearchParams";
 
 export const Catalog = () => {
-  const [params, setParams] = useSearchParams();
+  const [params, updateParams] = useUpdatableSearchParams();
   const pageSize = parseInt(params.get("pageSize") || "10");
   const page = parseInt(params.get("page") || "1");
 
@@ -57,11 +57,7 @@ export const Catalog = () => {
             <li
               key={category.id}
               onClick={() => {
-                setParams({
-                  pageSize: pageSize.toString(),
-                  page: "1",
-                  categoryId: category.id.toString(),
-                });
+                updateParams({ categoryId: category.id });
               }}
             >
               {category.id === categoryId && "Viewing "} {category.name}
@@ -71,11 +67,7 @@ export const Catalog = () => {
       </ol>
       <button
         onClick={() => {
-          setParams({
-            pageSize: pageSize.toString(),
-            categoryId: categoryId || "",
-            page: (page + 1).toString(),
-          });
+          updateParams({ page: page + 1 });
         }}
       >
         Next
@@ -83,11 +75,7 @@ export const Catalog = () => {
       {page > 2 && (
         <button
           onClick={() => {
-            setParams({
-              pageSize: pageSize.toString(),
-              categoryId: categoryId || "",
-              page: "1",
-            });
+            updateParams({ page: 1 });
           }}
         >
           First
@@ -96,11 +84,7 @@ export const Catalog = () => {
       {page > 1 && (
         <button
           onClick={() => {
-            setParams({
-              pageSize: pageSize.toString(),
-              categoryId: categoryId || "",
-              page: (page - 1).toString(),
-            });
+            updateParams({ page: page - 1 });
           }}
         >
           Previous
