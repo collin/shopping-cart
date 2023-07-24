@@ -6,6 +6,7 @@ import volleyball from "volleyball";
 import { execQuery } from "../db/execQuery";
 import Products from "../types/store/Products";
 import { z } from "zod";
+import { catchAsyncError } from "./catchAsyncError";
 
 export const app = express();
 
@@ -20,15 +21,17 @@ const paginationSchema = z.object({
   pageSize: z.coerce.number().int().positive(),
 });
 
-app.get("/api/products", async (req, res) => {
-  const paginationParams = paginationSchema.parse(req.query);
+app.get(
+  "/api/products",
+  catchAsyncError(async (req, res) => {
+    const paginationParams = paginationSchema.parse(req.query);
 
-  const limit = paginationParams.pageSize;
-  const page = paginationParams.page;
-  const offset = limit * (page - 1);
+    const limit = paginationParams.pageSize;
+    const page = paginationParams.page;
+    const offset = limit * (page - 1);
 
-  const { rows } = await execQuery<Products>(
-    /* SQL */ `
+    const { rows } = await execQuery<Products>(
+      /* SQL */ `
     select
       *
     from
@@ -40,8 +43,9 @@ app.get("/api/products", async (req, res) => {
     offset
       $2
   `,
-    [limit, offset],
-  );
+      [limit, offset],
+    );
 
-  res.json(rows);
-});
+    res.json(rows);
+  }),
+);
