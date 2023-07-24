@@ -173,7 +173,7 @@ describe("<Catalog />", () => {
 
       it("goes to the first page when the first page button is clicked", async () => {
         render(
-          <MemoryRouter initialEntries={["/?page=2"]}>
+          <MemoryRouter initialEntries={["/?page=3"]}>
             <Catalog />
           </MemoryRouter>,
         );
