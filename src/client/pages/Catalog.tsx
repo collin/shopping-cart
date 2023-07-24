@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import Products from "../../types/store/Products";
 import Categories from "../../types/store/Categories";
-import { useUpdatableSearchParams } from "../hooks/useUpdatableSearchParams";
+import { SearchLink } from "./SearchLink";
+import { useSearchParams } from "react-router-dom";
 
 export const Catalog = () => {
-  const [params, updateParams] = useUpdatableSearchParams();
+  const [params] = useSearchParams();
+
   const pageSize = parseInt(params.get("pageSize") || "10");
   const page = parseInt(params.get("page") || "1");
 
@@ -54,41 +56,18 @@ export const Catalog = () => {
       <ol title="Categories">
         {categories.map((category) => {
           return (
-            <li
-              key={category.id}
-              onClick={() => {
-                updateParams({ categoryId: category.id });
-              }}
-            >
-              {category.id === categoryId && "Viewing "} {category.name}
+            <li key={category.id}>
+              <SearchLink updates={{ categoryId: category.id, page: 1 }}>
+                {category.id === categoryId && "Viewing "} {category.name}
+              </SearchLink>
             </li>
           );
         })}
       </ol>
-      <button
-        onClick={() => {
-          updateParams({ page: page + 1 });
-        }}
-      >
-        Next
-      </button>
-      {page > 2 && (
-        <button
-          onClick={() => {
-            updateParams({ page: 1 });
-          }}
-        >
-          First
-        </button>
-      )}
+      <SearchLink updates={{ page: page + 1 }}>Next</SearchLink>
+      {page > 2 && <SearchLink updates={{ page: 1 }}>First</SearchLink>}
       {page > 1 && (
-        <button
-          onClick={() => {
-            updateParams({ page: page - 1 });
-          }}
-        >
-          Previous
-        </button>
+        <SearchLink updates={{ page: page - 1 }}>Previous</SearchLink>
       )}
     </div>
   );

@@ -159,7 +159,7 @@ describe("<Catalog />", () => {
       );
 
       await waitFor(() => {
-        screen.getByRole("button", { name: "Next" }).click();
+        screen.getByRole("link", { name: "Next" }).click();
       });
 
       await waitFor(() => {
@@ -179,7 +179,7 @@ describe("<Catalog />", () => {
       );
 
       await waitFor(() => {
-        screen.getByRole("button", { name: "Previous" }).click();
+        screen.getByRole("link", { name: "Previous" }).click();
       });
 
       await waitFor(() => {
@@ -191,7 +191,7 @@ describe("<Catalog />", () => {
       });
     });
 
-    it("hides the previous page button on the first page", async () => {
+    it("hides the previous page link on the first page", async () => {
       render(
         <MemoryRouter initialEntries={["/?page=1"]}>
           <Catalog />
@@ -199,12 +199,12 @@ describe("<Catalog />", () => {
       );
 
       await waitFor(async () => {
-        screen.getByRole("button", { name: "Next" });
-        expect(screen.queryByRole("button", { name: "Previous" })).toBeNull();
+        screen.getByRole("link", { name: "Next" });
+        expect(screen.queryByRole("link", { name: "Previous" })).toBeNull();
       });
     });
 
-    it("shows the next page button on pages after the first", async () => {
+    it("shows the next page link on pages after the first", async () => {
       render(
         <MemoryRouter initialEntries={["/?page=2"]}>
           <Catalog />
@@ -212,13 +212,13 @@ describe("<Catalog />", () => {
       );
 
       await waitFor(async () => {
-        screen.getByRole("button", { name: "Previous" });
-        screen.getByRole("button", { name: "Next" });
+        screen.getByRole("link", { name: "Previous" });
+        screen.getByRole("link", { name: "Next" });
       });
     });
 
     describe("First page controls", () => {
-      it("hides the first page button on the first page", async () => {
+      it("hides the first page link on the first page", async () => {
         render(
           <MemoryRouter initialEntries={["/?page=1"]}>
             <Catalog />
@@ -226,11 +226,11 @@ describe("<Catalog />", () => {
         );
 
         await waitFor(async () => {
-          expect(screen.queryByRole("button", { name: "First" })).toBeNull();
+          expect(screen.queryByRole("link", { name: "First" })).toBeNull();
         });
       });
 
-      it("hides the first page button on the second page", async () => {
+      it("hides the first page link on the second page", async () => {
         render(
           <MemoryRouter initialEntries={["/?page=2"]}>
             <Catalog />
@@ -238,11 +238,11 @@ describe("<Catalog />", () => {
         );
 
         await waitFor(async () => {
-          expect(screen.queryByRole("button", { name: "First" })).toBeNull();
+          expect(screen.queryByRole("link", { name: "First" })).toBeNull();
         });
       });
 
-      it("shows the first page button on pages after the second", async () => {
+      it("shows the first page link on pages after the second", async () => {
         render(
           <MemoryRouter initialEntries={["/?page=3"]}>
             <Catalog />
@@ -250,11 +250,11 @@ describe("<Catalog />", () => {
         );
 
         await waitFor(async () => {
-          screen.getByRole("button", { name: "First" });
+          screen.getByRole("link", { name: "First" });
         });
       });
 
-      it("goes to the first page when the first page button is clicked", async () => {
+      it("goes to the first page when the first page link is clicked", async () => {
         render(
           <MemoryRouter initialEntries={["/?page=3"]}>
             <Catalog />
@@ -262,12 +262,12 @@ describe("<Catalog />", () => {
         );
 
         await waitFor(async () => {
-          screen.getByRole("button", { name: "First" }).click();
+          screen.getByRole("link", { name: "First" }).click();
         });
 
         await waitFor(async () => {
-          expect(screen.queryByRole("button", { name: "Previous" })).toBeNull();
-          screen.getByRole("button", { name: "Next" });
+          expect(screen.queryByRole("link", { name: "Previous" })).toBeNull();
+          screen.getByRole("link", { name: "Next" });
         });
       });
 
@@ -279,7 +279,7 @@ describe("<Catalog />", () => {
         );
 
         await waitFor(async () => {
-          screen.getByRole("button", { name: "First" }).click();
+          screen.getByRole("link", { name: "First" }).click();
         });
 
         await waitFor(async () => {
