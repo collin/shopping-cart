@@ -14,8 +14,6 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/shopping-cart-test
     services:
       # Label used to access the service container
       postgres:
@@ -24,6 +22,9 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -39,4 +40,6 @@ jobs:
       - name: Install
         run: npm ci
       - name: Test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@postgres:${{ job.services.postgres.ports[5432] }}/shopping-cart-test
         run: npm test -- --run --coverage
