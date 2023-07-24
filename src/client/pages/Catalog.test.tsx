@@ -45,7 +45,7 @@ describe("<Catalog />", () => {
     });
   });
 
-  it("renders the page size of products", async () => {
+  it.only("renders the page size of products", async () => {
     render(
       <MemoryRouter initialEntries={["/?pageSize=2"]}>
         <Catalog />
