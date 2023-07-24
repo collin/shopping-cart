@@ -133,16 +133,60 @@ describe("<Catalog />", () => {
         screen.getByRole("button", { name: "Next" });
       });
     });
+
+    describe("First page controls", () => {
+      it("hides the first page button on the first page", async () => {
+        render(
+          <MemoryRouter initialEntries={["/?page=1"]}>
+            <Catalog />
+          </MemoryRouter>,
+        );
+
+        await waitFor(async () => {
+          expect(screen.queryByRole("button", { name: "First" })).toBeNull();
+        });
+      });
+
+      it("hides the first page button on the second page", async () => {
+        render(
+          <MemoryRouter initialEntries={["/?page=2"]}>
+            <Catalog />
+          </MemoryRouter>,
+        );
+
+        await waitFor(async () => {
+          expect(screen.queryByRole("button", { name: "First" })).toBeNull();
+        });
+      });
+
+      it("shows the first page button on pages after the second", async () => {
+        render(
+          <MemoryRouter initialEntries={["/?page=3"]}>
+            <Catalog />
+          </MemoryRouter>,
+        );
+
+        await waitFor(async () => {
+          screen.getByRole("button", { name: "First" });
+        });
+      });
+
+      it("goes to the first page when the first page button is clicked", async () => {
+        render(
+          <MemoryRouter initialEntries={["/?page=2"]}>
+            <Catalog />
+          </MemoryRouter>,
+        );
+
+        await waitFor(async () => {
+          screen.getByRole("button", { name: "First" }).click();
+        });
+
+        await waitFor(async () => {
+          expect(screen.queryByRole("button", { name: "Previous" })).toBeNull();
+          screen.getByRole("button", { name: "Next" });
+        });
+      });
+    });
   });
 });
-
-// go to next page
-// go to prev page
-// go to first page
-// go to last page (????)
-
-// /catalog?page=1&size=5
-
-// disallow negative pages page -1
-// disallow negative page size size -1
-// maximum page size
