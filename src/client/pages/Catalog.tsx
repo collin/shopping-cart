@@ -41,16 +41,18 @@ export const Catalog = () => {
       >
         Next
       </button>
-      <button
-        onClick={() => {
-          setParams({
-            pageSize: pageSize.toString(),
-            page: (page - 1).toString(),
-          });
-        }}
-      >
-        Previous
-      </button>
+      {page > 1 && (
+        <button
+          onClick={() => {
+            setParams({
+              pageSize: pageSize.toString(),
+              page: (page - 1).toString(),
+            });
+          }}
+        >
+          Previous
+        </button>
+      )}
     </div>
   );
 };

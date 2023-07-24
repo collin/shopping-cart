@@ -72,19 +72,6 @@ describe("<Catalog />", () => {
   });
 
   describe("Page controls", () => {
-    it("renders the page controls", async () => {
-      render(
-        <MemoryRouter>
-          <Catalog />
-        </MemoryRouter>,
-      );
-
-      await waitFor(() => {
-        screen.getByRole("button", { name: "Next" });
-        screen.getByRole("button", { name: "Previous" });
-      });
-    });
-
     it("renders the next page of products when requested", async () => {
       render(
         <MemoryRouter initialEntries={["/?pageSize=2"]}>
@@ -103,7 +90,7 @@ describe("<Catalog />", () => {
       });
     });
 
-    it.only("renders the previous page of products when requested", async () => {
+    it("renders the previous page of products when requested", async () => {
       render(
         <MemoryRouter initialEntries={["/?pageSize=2&page=2"]}>
           <Catalog />
@@ -118,6 +105,32 @@ describe("<Catalog />", () => {
         expect(screen.getAllByRole("listitem")).toHaveLength(2);
         screen.getByText("Product 1");
         screen.getByText("Product 2");
+      });
+    });
+
+    it("hides the previous page button on the first page", async () => {
+      render(
+        <MemoryRouter initialEntries={["/?page=1"]}>
+          <Catalog />
+        </MemoryRouter>,
+      );
+
+      await waitFor(async () => {
+        screen.getByRole("button", { name: "Next" });
+        expect(screen.queryByRole("button", { name: "Previous" })).toBeNull();
+      });
+    });
+
+    it("shows the next page button on pages after the first", async () => {
+      render(
+        <MemoryRouter initialEntries={["/?page=2"]}>
+          <Catalog />
+        </MemoryRouter>,
+      );
+
+      await waitFor(async () => {
+        screen.getByRole("button", { name: "Previous" });
+        screen.getByRole("button", { name: "Next" });
       });
     });
   });
