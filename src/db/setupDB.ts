@@ -7,10 +7,12 @@ export async function setupDB() {
   // drop existing tables/schema
   await execQuery(/* SQL */ `
     DROP SCHEMA IF EXISTS store CASCADE;
+    CREATE SCHEMA store;
+
+    DROP SCHEMA IF EXISTS users CASCADE;
+    CREATE SCHEMA users;
   `);
 
-  // create new tables/schema
-  await execQuery(/* SQL */ `CREATE SCHEMA store`);
   // Table store.products {
   //   id bigserial [pk] // integer
   //   title text [not null]
@@ -26,6 +28,13 @@ export async function setupDB() {
   // Table store.products_categories {
   //   product_id bigint [pk, ref: > "store"."products"."id"]
   //   category_id bigint [pk, ref: > "store"."categories"."id"]
+  // }
+
+  // Table user.users {
+  //   id bigserial [pk]
+  //   display_name string [not null]
+  //   email_address string [not null, unique]
+  //   hashed_password string [not null]
   // }
 
   await execQuery(/* SQL */ `
@@ -45,6 +54,13 @@ export async function setupDB() {
       product_id BIGINT REFERENCES store.products(id),
       category_id BIGINT REFERENCES store.categories(id),
       PRIMARY KEY (product_id, category_id)
+    );
+
+    CREATE TABLE users.users (
+      id BIGSERIAL PRIMARY KEY,
+      display_name TEXT NOT NULL,
+      email_address TEXT NOT NULL UNIQUE,
+      hashed_password TEXT NOT NULL
     );
     `);
 }
