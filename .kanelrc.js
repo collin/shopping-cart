@@ -7,4 +7,7 @@ if (!process.env.DATABASE_URL) {
 module.exports = {
   outputPath: "./src/types",
   connection: process.env.DATABASE_URL,
+  customTypeMap: {
+    "pg_catalog.bytea": "Buffer",
+  },
 };

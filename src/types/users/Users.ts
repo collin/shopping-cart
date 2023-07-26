@@ -12,7 +12,9 @@ export default interface Users {
 
   email_address: string;
 
-  hashed_password: string;
+  hashed_password: Buffer;
+
+  salt: Buffer;
 }
 
 /** Represents the initializer for the table users.users */
@@ -24,7 +26,9 @@ export interface UsersInitializer {
 
   email_address: string;
 
-  hashed_password: string;
+  hashed_password: Buffer;
+
+  salt: Buffer;
 }
 
 /** Represents the mutator for the table users.users */
@@ -35,5 +39,7 @@ export interface UsersMutator {
 
   email_address?: string;
 
-  hashed_password?: string;
+  hashed_password?: Buffer;
+
+  salt?: Buffer;
 }
