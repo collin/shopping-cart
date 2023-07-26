@@ -34,7 +34,8 @@ export async function setupDB() {
   //   id bigserial [pk]
   //   display_name string [not null]
   //   email_address string [not null, unique]
-  //   hashed_password string [not null]
+  //   salt byte [not null]
+  //   hashed_password bytea [not null]
   // }
 
   await execQuery(/* SQL */ `
@@ -60,7 +61,8 @@ export async function setupDB() {
       id BIGSERIAL PRIMARY KEY,
       display_name TEXT NOT NULL,
       email_address TEXT NOT NULL UNIQUE,
-      hashed_password TEXT NOT NULL
+      hashed_password BYTEA NOT NULL,
+      salt BYTEA NOT NULL
     );
     `);
 }

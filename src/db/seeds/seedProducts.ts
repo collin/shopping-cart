@@ -3,6 +3,7 @@ import { execQuery } from "../execQuery";
 
 const SEED_PRODUCT_COUNT = parseInt(process.env.SEED_PRODUCT_COUNT || "100");
 const SEED_CATEGORY_COUNT = parseInt(process.env.SEED_CATEGORY_COUNT || "10");
+
 export async function seedProducts() {
   for (let i = 0; i < SEED_CATEGORY_COUNT; i++) {
     await execQuery(
