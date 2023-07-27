@@ -11,6 +11,7 @@ import { catchAsyncError } from "./catchAsyncError";
 export const app = express();
 
 app.use(volleyball);
+app.use(express.json());
 
 app.get("/test", (req, res) => {
   res.send("Changing code reloads :)");

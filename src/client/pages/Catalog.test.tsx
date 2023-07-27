@@ -2,49 +2,6 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Catalog } from "./Catalog";
 
-import { app } from "../../server/app";
-import { setupDB } from "../../db/setupDB";
-import { execQuery } from "../../db/execQuery";
-
-const TEST_PORT = 3000;
-
-beforeAll(async () => {
-  await setupDB();
-  await execQuery(/* SQL */ `
-    insert into store.products (title, description, price)
-    values
-      ('Product 1', 'Description 1', 100),
-      ('Product 2', 'Description 2', 200),
-      ('Product 3', 'Description 3', 300),
-      ('Product 4', 'Description 4', 300)
-  `);
-  await execQuery(/* SQL */ `
-    insert into store.categories (name)
-    values
-      ('Category 1'),
-      ('Category 2'),
-      ('Category 3'),
-      ('Category 4')
-  `);
-  await execQuery(/* SQL */ `
-    insert into store.products_categories (product_id, category_id)
-    values
-      (1, 1),
-      (2, 2),
-      (3, 3),
-      (4, 4)
-  `);
-});
-
-beforeAll(() => {
-  return new Promise((resolve) => {
-    app.listen(TEST_PORT, () => {
-      console.log(`Test server listening at http://localhost:${TEST_PORT}`);
-      resolve();
-    });
-  });
-});
-
 describe("<Catalog />", () => {
   describe("Categories", () => {
     it("Renders all categories in the catalog", async () => {
