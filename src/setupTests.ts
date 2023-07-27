@@ -3,6 +3,7 @@ import { rest } from "msw";
 import { setupServer } from "msw/node";
 import request from "supertest";
 
+// TODO: consider this a unit for testing
 const server = setupServer(
   rest.all("/api/*", async (req, res, ctx) => {
     try {
@@ -15,7 +16,11 @@ const server = setupServer(
         .set(req.headers.all())
         .send(body);
 
-      return res(ctx.json(result.body));
+      return res(
+        ctx.status(result.status),
+        ctx.set(result.headers),
+        ctx.json(result.body),
+      );
     } catch (error) {
       console.log("ERROR", error);
     }
