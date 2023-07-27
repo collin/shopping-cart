@@ -10,12 +10,16 @@ const server = setupServer(
       // TODO: Decide whether or not to determine if there is a request body before trying to use it
       const body = (await req.json().catch(() => null)) || {};
 
+      // TODO: implement log level system
+      // console.log(req.method, req.url.pathname + req.url.search, body);
       // @ts-expect-error request method downcased will be one of the valid request methods
       const result = await request(app)
         [req.method.toLowerCase()](req.url.pathname + req.url.search)
         .set(req.headers.all())
         .send(body);
 
+      // TODO: implement log level system
+      // console.log(result.status, result.headers, result.body);
       return res(
         ctx.status(result.status),
         ctx.set(result.headers),
