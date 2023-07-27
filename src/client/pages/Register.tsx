@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { RegisteredUser } from "../../server/api/user";
 
 export const Register = () => {
@@ -6,14 +6,16 @@ export const Register = () => {
     null,
   );
 
+  const nameInput = useRef<HTMLInputElement>(null);
+  const emailInput = useRef<HTMLInputElement>(null);
+  const passwordInput = useRef<HTMLInputElement>(null);
+  const passwordConfirmInput = useRef<HTMLInputElement>(null);
+
   function validatePasswordConfirmation(event: ChangeEvent) {
-    const password = (document.getElementById("password") as any)?.value;
-    const passwordConfirm = (document.getElementById("confirmPassword") as any)
-      ?.value;
-    if (password !== passwordConfirm) {
-      (event.target as any).setCustomValidity("Passwords must match");
+    if (passwordInput.current?.value !== passwordConfirmInput.current?.value) {
+      passwordConfirmInput.current?.setCustomValidity("Passwords must match");
     } else {
-      (event.target as any).setCustomValidity("");
+      passwordConfirmInput.current?.setCustomValidity("");
     }
   }
 
@@ -25,10 +27,9 @@ export const Register = () => {
           event.preventDefault();
           // TODO: figure out better way to get field values
           const payload = JSON.stringify({
-            displayName: (event.target as any).querySelector("#displayname")
-              .value,
-            email: (event.target as any).querySelector("#email").value,
-            password: (event.target as any).querySelector("#password").value,
+            displayName: nameInput.current?.value,
+            email: emailInput.current?.value,
+            password: passwordInput.current?.value,
           });
           console.log(payload);
           console.log(`${location.origin}/api/user/register`);
@@ -64,15 +65,16 @@ export const Register = () => {
         }}
       >
         <label htmlFor="displayname">Display Name</label>
-        <input type="text" id="displayname" required />
+        <input type="text" id="displayname" ref={nameInput} required />
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" required />
+        <input type="email" id="email" name="email" ref={emailInput} required />
         <label htmlFor="password">Password</label>
         <input
           type="password"
           id="password"
           name="password"
           onChange={validatePasswordConfirmation}
+          ref={passwordInput}
           required
         />
         <label htmlFor="passwordConfirm">Confirm Password</label>
@@ -81,6 +83,7 @@ export const Register = () => {
           id="passwordConfirm"
           name="passwordConfirm"
           onChange={validatePasswordConfirmation}
+          ref={passwordConfirmInput}
           required
         />
         <button type="submit">Register</button>
