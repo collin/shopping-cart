@@ -1,10 +1,22 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { RegisteredUser } from "../../server/api/user";
 
 export const Register = () => {
   const [registeredUser, setRegisteredUser] = useState<RegisteredUser | null>(
     null,
   );
+
+  function validatePasswordConfirmation(event: ChangeEvent) {
+    const password = (document.getElementById("password") as any)?.value;
+    const passwordConfirm = (document.getElementById("confirmPassword") as any)
+      ?.value;
+    if (password !== passwordConfirm) {
+      (event.target as any).setCustomValidity("Passwords must match");
+    } else {
+      (event.target as any).setCustomValidity("");
+    }
+  }
+
   return (
     <div>
       <h1>Register</h1>
@@ -52,13 +64,25 @@ export const Register = () => {
         }}
       >
         <label htmlFor="displayname">Display Name</label>
-        <input type="text" id="displayname" />
+        <input type="text" id="displayname" required />
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" />
+        <input type="email" id="email" name="email" required />
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" name="password" />
+        <input
+          type="password"
+          id="password"
+          name="password"
+          onChange={validatePasswordConfirmation}
+          required
+        />
         <label htmlFor="passwordConfirm">Confirm Password</label>
-        <input type="password" id="passwordConfirm" name="passwordConfirm" />
+        <input
+          type="password"
+          id="passwordConfirm"
+          name="passwordConfirm"
+          onChange={validatePasswordConfirmation}
+          required
+        />
         <button type="submit">Register</button>
       </form>
 

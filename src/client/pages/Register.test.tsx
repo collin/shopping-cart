@@ -10,6 +10,33 @@ describe("<Register>", () => {
     );
   });
 
+  it("Requires all fields be filled out", async () => {
+    render(<Register />);
+    expect(
+      screen.getByLabelText<HTMLInputElement>("Display Name").validity.valid,
+    ).toBe(false);
+    expect(
+      screen.getByLabelText<HTMLInputElement>("Email").validity.valid,
+    ).toBe(false);
+    expect(
+      screen.getByLabelText<HTMLInputElement>("Password").validity.valid,
+    ).toBe(false);
+    expect(
+      screen.getByLabelText<HTMLInputElement>("Confirm Password").validity
+        .valid,
+    ).toBe(false);
+  });
+
+  it("Requires password confirmation to match password", async () => {
+    render(<Register />);
+    await userEvent.type(screen.getByLabelText("Password"), "testpassword");
+    await userEvent.type(screen.getByLabelText("Confirm Password"), "test");
+    expect(
+      screen.getByLabelText<HTMLInputElement>("Confirm Password").validity
+        .valid,
+    ).toBe(false);
+  });
+
   it("Takes user registration", async () => {
     const user = userEvent.setup();
     render(<Register />);
