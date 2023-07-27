@@ -7,7 +7,7 @@ describe("Home route: /", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <App />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByText("Homepage");
@@ -19,9 +19,21 @@ describe("Catalog route: /catalog", () => {
     render(
       <MemoryRouter initialEntries={["/catalog"]}>
         <App />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByText("Catalogpage");
+  });
+});
+
+describe("Register route: /register", () => {
+  it("renders the register page", () => {
+    render(
+      <MemoryRouter initialEntries={["/register"]}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    screen.getByRole("heading", { name: "Register" });
   });
 });
