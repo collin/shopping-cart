@@ -6,8 +6,35 @@ import { execQuery } from "../../db/execQuery";
 describe("<Register>", () => {
   beforeEach(async () => {
     await execQuery(
-      /* SQL */ `DELETE FROM users.users WHERE email_address = 'test@example.org'`,
+      /* SQL */ `DELETE FROM users.users WHERE email_address = 'test-registered@example.org'`,
     );
+  });
+
+  it("Takes user registration", async () => {
+    // Arrange
+    const user = userEvent.setup();
+    render(<Register />);
+
+    // Act
+    await user.type(screen.getByLabelText("Display Name"), "Test Displayname");
+    await user.type(
+      screen.getByLabelText("Email"),
+      "test-registered@example.org",
+    );
+    await user.type(screen.getByLabelText("Password"), "testpassword");
+    await user.type(screen.getByLabelText("Confirm Password"), "testpassword");
+
+    await userEvent.click(screen.getByRole("button", { name: "Register" }));
+
+    // Assert
+    await waitFor(() => {
+      screen.getByText(
+        "Hello Test Displayname, your registration was successful!",
+      );
+      screen.getByText("Your email is test-registered@example.org.");
+
+      expect(screen.queryByLabelText("Register")).toBeNull();
+    });
   });
 
   describe("Display Name Input", () => {
@@ -36,7 +63,7 @@ describe("<Register>", () => {
 
       expect(screen.getByText("Email address is required"));
 
-      await userEvent.type(emailInput, "test@example.org");
+      await userEvent.type(emailInput, "test-registered@example.org");
 
       expect(screen.queryByText("Email address is required")).toBeNull();
     });
@@ -89,30 +116,6 @@ describe("<Register>", () => {
 
       expect(passwordConfirmInput.validity.valid).toBe(false);
       screen.getByText("Password confirmation must match password");
-    });
-  });
-
-  it.only("Takes user registration", async () => {
-    // Arrange
-    const user = userEvent.setup();
-    render(<Register />);
-
-    // Act
-    await user.type(screen.getByLabelText("Display Name"), "Test Displayname");
-    await user.type(screen.getByLabelText("Email"), "test@example.org");
-    await user.type(screen.getByLabelText("Password"), "testpassword");
-    await user.type(screen.getByLabelText("Confirm Password"), "testpassword");
-
-    await userEvent.click(screen.getByRole("button", { name: "Register" }));
-
-    // Assert
-    await waitFor(() => {
-      screen.getByText(
-        "Hello Test Displayname, your registration was successful!",
-      );
-      screen.getByText("Your email is test@example.org.");
-
-      expect(screen.queryByLabelText("Register")).toBeNull();
     });
   });
 });
