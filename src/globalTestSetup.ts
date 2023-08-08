@@ -1,9 +1,8 @@
 import { execQuery } from "./db/execQuery";
+import { seedUser } from "./db/seeds/seedUsers";
 import { setupDB } from "./db/setupDB";
 
 export default async () => {
-  process.env.DATABASE_URL =
-    "postgres://postgres:postgres@localhost:5432/shopping-cart-test";
   const TEST_PORT = 3000;
 
   await setupDB();
@@ -31,4 +30,6 @@ export default async () => {
           (3, 3),
           (4, 4)
       `);
+
+  await seedUser("Test User", "test-user@example.org", "testpassword");
 };

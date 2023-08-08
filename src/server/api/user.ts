@@ -1,5 +1,4 @@
-import crypto from "node:crypto";
-import { promisify } from "node:util";
+import crypto, { BinaryLike } from "node:crypto";
 import { sign } from "jsonwebtoken";
 import { Router } from "express";
 import { catchAsyncError } from "../catchAsyncError";
@@ -7,7 +6,20 @@ import { execQuery } from "../../db/execQuery";
 import { z } from "zod";
 import Users from "../../types/users/Users";
 
-const scrpytPromise = promisify(crypto.scrypt);
+const scryptPromise = (
+  password: BinaryLike,
+  salt: BinaryLike,
+  keyLength: number,
+) =>
+  new Promise<Buffer>((resolve, reject) => {
+    crypto.scrypt(password, salt, keyLength, (err, derivedKey) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(derivedKey);
+      }
+    });
+  });
 
 export const userRouter = Router();
 
@@ -34,7 +46,7 @@ userRouter.post(
     const { email, password, displayName } = registerSchema.parse(req.body);
     // generate salt and hash with scrpyt
     const salt = crypto.randomBytes(16);
-    const hashedPassword = await scrpytPromise(password, salt, 64);
+    const hashedPassword = await scryptPromise(password, salt, 64);
 
     console.log(email, password, displayName, salt, hashedPassword);
     // TODO: figure out how to type this without the assertion
@@ -63,5 +75,55 @@ userRouter.post(
     });
 
     res.json(user);
+  }),
+);
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+userRouter.post(
+  "/login",
+  catchAsyncError(async (req, res) => {
+    const { email, password } = loginSchema.parse(req.body);
+
+    const {
+      rows: [user],
+    } = await execQuery<Users>(
+      /* SQL */ `
+        select id, email_address, display_name, hashed_password, salt
+        from users.users
+        where email_address = $1
+      `,
+      [email],
+    );
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const hashedPassword = await scryptPromise(password, user.salt, 64);
+
+    if (!hashedPassword.equals(user.hashed_password)) {
+      throw new Error("Incorrect password");
+    }
+
+    const token = sign({ role: "user" }, JWT_SESSION_SECRET, {
+      subject: user.id,
+    });
+
+    res.cookie("token", token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    });
+
+    // TODO: this response includes the salt and hashed password which we should
+    // NEVER expose outside of a trusted context like our server
+    res.json({
+      id: user.id,
+      display_name: user.display_name,
+      email_address: user.email_address,
+    });
   }),
 );
