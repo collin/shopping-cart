@@ -1,7 +1,7 @@
-import { app } from "./server/app";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import request from "supertest";
+import { app } from "./server/app";
 
 // TODO: consider this a unit for testing
 const server = setupServer(
@@ -30,8 +30,9 @@ const server = setupServer(
     }
   }),
 );
-
-server.listen();
+server.listen({
+  onUnhandledRequest: "bypass",
+});
 
 // Not calling server.close, because vitest appears to terminate the process
 // between test runs, so manual cleanup is not necessary.
