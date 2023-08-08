@@ -8,8 +8,6 @@ export const Register = () => {
     null,
   );
 
-  const forceRender = useForceRender();
-
   const nameInput = useRef<HTMLInputElement>(null);
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
@@ -30,7 +28,6 @@ export const Register = () => {
       {!registeredUser && (
         <form
           aria-labelledby="registrationFormTitle"
-          onChange={forceRender}
           onSubmit={async (event) => {
             event.preventDefault();
             // TODO: figure out better way to get field values

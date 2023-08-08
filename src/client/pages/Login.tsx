@@ -7,8 +7,6 @@ export const Login = () => {
   const [authenticatedUser, setAuthenticatedUser] =
     useState<RegisteredUser | null>(null);
 
-  const forceRender = useForceRender();
-
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
 
@@ -16,7 +14,6 @@ export const Login = () => {
     <div>
       {!authenticatedUser && (
         <form
-          onChange={forceRender}
           aria-labelledby="loginFormTitle"
           onSubmit={async (event) => {
             event.preventDefault();
