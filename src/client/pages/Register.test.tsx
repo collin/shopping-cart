@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Register } from "./Register";
 import { execQuery } from "../../db/execQuery";
@@ -92,7 +92,7 @@ describe("<Register>", () => {
     });
   });
 
-  it("Takes user registration", async () => {
+  it.only("Takes user registration", async () => {
     // Arrange
     const user = userEvent.setup();
     render(<Register />);
@@ -111,6 +111,8 @@ describe("<Register>", () => {
         "Hello Test Displayname, your registration was successful!",
       );
       screen.getByText("Your email is test@example.org.");
+
+      expect(screen.queryByLabelText("Register")).toBeNull();
     });
   });
 });
