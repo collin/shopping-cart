@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
 import { ValidatedInput } from "../components/ValidatedInput";
 import { RegisteredUser } from "../../server/api/user";
+import { useForceRender } from "../hooks/useForceRender";
 
 export const Login = () => {
   const [authenticatedUser, setAuthenticatedUser] =
     useState<RegisteredUser | null>(null);
+
+  const forceRender = useForceRender();
 
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
@@ -13,6 +16,7 @@ export const Login = () => {
     <div>
       {!authenticatedUser && (
         <form
+          onChange={forceRender}
           aria-labelledby="loginFormTitle"
           onSubmit={async (event) => {
             event.preventDefault();
@@ -54,12 +58,19 @@ export const Login = () => {
             type="email"
             ref={emailInput}
             required
+            validations={{
+              valueMissing: "Email is required",
+              typeMismatch: "Please enter a valid email address",
+            }}
           />
           <ValidatedInput
             label="Password"
             type="password"
             ref={passwordInput}
             required
+            validations={{
+              valueMissing: "Password is required",
+            }}
           />
           <button type="submit">Login</button>
         </form>
