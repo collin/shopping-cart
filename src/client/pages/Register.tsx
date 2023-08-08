@@ -1,10 +1,14 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { RegisteredUser } from "../../server/api/user";
+import { useForceRender } from "../hooks/useForceRender";
+import { ValidatedInput } from "../components/ValidatedInput";
 
 export const Register = () => {
   const [registeredUser, setRegisteredUser] = useState<RegisteredUser | null>(
     null,
   );
+
+  const forceRender = useForceRender();
 
   const nameInput = useRef<HTMLInputElement>(null);
   const emailInput = useRef<HTMLInputElement>(null);
@@ -13,7 +17,9 @@ export const Register = () => {
 
   function validatePasswordConfirmation(event: ChangeEvent) {
     if (passwordInput.current?.value !== passwordConfirmInput.current?.value) {
-      passwordConfirmInput.current?.setCustomValidity("Passwords must match");
+      passwordConfirmInput.current?.setCustomValidity(
+        "Password confirmation MUST match password",
+      );
     } else {
       passwordConfirmInput.current?.setCustomValidity("");
     }
@@ -23,6 +29,7 @@ export const Register = () => {
     <div>
       <h1>Register</h1>
       <form
+        onChange={forceRender}
         onSubmit={async (event) => {
           event.preventDefault();
           // TODO: figure out better way to get field values
@@ -64,27 +71,48 @@ export const Register = () => {
           }
         }}
       >
-        <label htmlFor="displayname">Display Name</label>
-        <input type="text" id="displayname" ref={nameInput} required />
-        <label htmlFor="email">Email</label>
-        <input type="email" id="email" name="email" ref={emailInput} required />
-        <label htmlFor="password">Password</label>
-        <input
+        <ValidatedInput
+          label="Display Name"
+          type="text"
+          ref={nameInput}
+          required
+          validations={{
+            valueMissing: "Display name is required",
+          }}
+        />
+
+        <ValidatedInput
+          label="Email"
+          type="email"
+          ref={emailInput}
+          required
+          validations={{
+            valueMissing: "Email address is required",
+            typeMismatch: "Please enter a valid email address",
+          }}
+        />
+
+        <ValidatedInput
+          label="Password"
           type="password"
-          id="password"
-          name="password"
           onChange={validatePasswordConfirmation}
           ref={passwordInput}
           required
+          validations={{
+            valueMissing: "Password is required",
+          }}
         />
-        <label htmlFor="passwordConfirm">Confirm Password</label>
-        <input
+
+        <ValidatedInput
+          label="Confirm Password"
           type="password"
-          id="passwordConfirm"
-          name="passwordConfirm"
           onChange={validatePasswordConfirmation}
           ref={passwordConfirmInput}
           required
+          validations={{
+            valueMissing: "Password confirmation is required",
+            customError: "Password confirmation must match password",
+          }}
         />
         <button type="submit">Register</button>
       </form>

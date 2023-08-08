@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { promisify } from "node:util";
+import { sign } from "jsonwebtoken";
 import { Router } from "express";
 import { catchAsyncError } from "../catchAsyncError";
 import { execQuery } from "../../db/execQuery";
@@ -16,7 +17,16 @@ const registerSchema = z.object({
   displayName: z.string(),
 });
 
-export type RegisteredUser = Pick<Users, "display_name" | "email_address">;
+export type RegisteredUser = Pick<
+  Users,
+  "id" | "display_name" | "email_address"
+>;
+
+if (!process.env.JWT_SESSION_SECRET) {
+  throw new Error("JWT_SESSION_SECRET not set");
+}
+
+const JWT_SESSION_SECRET = process.env.JWT_SESSION_SECRET;
 
 userRouter.post(
   "/register",
@@ -34,7 +44,7 @@ userRouter.post(
       /* SQL */ `
         insert into users.users (email_address, salt, hashed_password, display_name)
         values ($1, $2, $3, $4)
-        returning email_address, display_name
+        returning id, email_address, display_name
       `,
       [email, salt, hashedPassword, displayName],
     );
@@ -42,6 +52,15 @@ userRouter.post(
     if (!user) {
       throw new Error("Failed to create user");
     }
+
+    const token = sign({ role: "user" }, JWT_SESSION_SECRET, {
+      subject: user.id,
+    });
+
+    res.cookie("token", token, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true,
+    });
 
     res.json(user);
   }),
