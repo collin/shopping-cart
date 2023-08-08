@@ -7,7 +7,7 @@ describe("Navigation links", () => {
     render(
       <MemoryRouter>
         <Navigation />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByRole("link", { name: "Home" });
@@ -17,9 +17,19 @@ describe("Navigation links", () => {
     render(
       <MemoryRouter>
         <Navigation />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByRole("link", { name: "Catalog" });
+  });
+
+  it("renders a link to the registration page", () => {
+    render(
+      <MemoryRouter>
+        <Navigation />
+      </MemoryRouter>,
+    );
+
+    screen.getByRole("link", { name: "Register" });
   });
 });
