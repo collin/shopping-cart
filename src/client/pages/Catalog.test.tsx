@@ -2,11 +2,8 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Catalog } from "./Catalog";
 
-import { app } from "../../server/app";
 import { setupDB } from "../../db/setupDB";
 import { execQuery } from "../../db/execQuery";
-
-const TEST_PORT = 3000;
 
 beforeAll(async () => {
   await setupDB();
@@ -34,15 +31,6 @@ beforeAll(async () => {
       (3, 3),
       (4, 4)
   `);
-});
-
-beforeAll(() => {
-  return new Promise((resolve) => {
-    app.listen(TEST_PORT, () => {
-      console.log(`Test server listening at http://localhost:${TEST_PORT}`);
-      resolve();
-    });
-  });
 });
 
 describe("<Catalog />", () => {
@@ -132,7 +120,9 @@ describe("<Catalog />", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      expect(
+        within(screen.getByTitle("Products")).getAllByRole("listitem"),
+      ).toHaveLength(2);
     });
   });
 
