@@ -41,5 +41,5 @@ jobs:
         run: npm ci
       - name: Test
         env:
-          DATABASE_URL: postgres://postgres:postgres@postgres:${{ job.services.postgres.ports[5432] }}/shopping-cart-test
+          DATABASE_URL: postgres://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/shopping-cart-test
         run: npm test -- --run --coverage
