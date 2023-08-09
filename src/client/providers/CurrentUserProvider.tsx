@@ -1,4 +1,10 @@
-import { PropsWithChildren, createContext, useContext, useState } from "react";
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { RegisteredUser } from "../../server/api/user";
 
 type CurrentUserContextType = [
@@ -11,9 +17,28 @@ const CurrentUserContext = createContext<CurrentUserContextType | undefined>(
 );
 
 export const CurrentUserProvider = (props: PropsWithChildren) => {
-  const currentUserState = useState<RegisteredUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<RegisteredUser | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const response = await fetch(`${location.origin}/api/user/me`, {});
+      if (!response.ok) {
+        console.log(
+          "Failed to fetch profile",
+          response.status,
+          response.statusText,
+        );
+        return;
+      }
+      const profile = await response.json();
+      console.log("GOT PROFILE", profile);
+      setCurrentUser(profile);
+    };
+    fetchProfile();
+  }, []);
+
   return (
-    <CurrentUserContext.Provider value={currentUserState}>
+    <CurrentUserContext.Provider value={[currentUser, setCurrentUser]}>
       {props.children}
     </CurrentUserContext.Provider>
   );
