@@ -11,6 +11,9 @@ export async function setupDB() {
 
     DROP SCHEMA IF EXISTS users CASCADE;
     CREATE SCHEMA users;
+
+    DROP SCHEMA IF EXISTS orders CASCADE;
+    CREATE SCHEMA orders;
   `);
 
   // Table store.products {
@@ -38,6 +41,25 @@ export async function setupDB() {
   //   hashed_password bytea [not null]
   // }
 
+  // Enum orders.order_status {
+  //   open
+  //   closed
+  //   cancelled
+  // }
+
+  // Table orders.orders {
+  //   id bigserial [pk]
+  //   user_id bigint [ref: > "user"."users"."id"]
+  //   status orders.order_status [not null, default: 'open']
+  // }
+
+  // Table orders.line_items {
+  //   product_id bigint [pk, ref: > "store"."products"."id"]
+  //   order_id bigint [pk, ref: > "orders"."orders"."id"]
+  //   sale_price integer [not null, note: 'must be >= 0']
+  //   quantity integer [not null, note: 'must be > 0']
+  // }
+
   await execQuery(/* SQL */ `
     CREATE TABLE store.products (
       id BIGSERIAL PRIMARY KEY, 
@@ -63,6 +85,22 @@ export async function setupDB() {
       email_address TEXT NOT NULL UNIQUE,
       hashed_password BYTEA NOT NULL,
       salt BYTEA NOT NULL
+    );
+
+    CREATE TYPE orders.order_status AS ENUM ('open', 'closed', 'cancelled');
+
+    CREATE TABLE orders.orders (
+      id BIGSERIAL PRIMARY KEY,
+      user_id BIGINT REFERENCES users.users(id),
+      status orders.order_status NOT NULL DEFAULT 'open'
+    );
+
+    CREATE TABLE orders.line_items (
+      product_id BIGINT REFERENCES store.products(id),
+      order_id BIGINT REFERENCES orders.orders(id),
+      sale_price INTEGER NOT NULL CHECK (sale_price >= 0),
+      quantity INTEGER NOT NULL CHECK (quantity > 0),
+      PRIMARY KEY (product_id, order_id)
     );
     `);
 }
