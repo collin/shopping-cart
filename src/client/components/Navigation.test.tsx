@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Navigation } from "./Navigation";
+import { testRender } from "../testRender";
 
 describe("Navigation links", () => {
   it("renders a link to the home page", () => {

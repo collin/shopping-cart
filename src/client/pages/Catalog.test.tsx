@@ -4,6 +4,7 @@ import { Catalog } from "./Catalog";
 
 import { setupDB } from "../../db/setupDB";
 import { execQuery } from "../../db/execQuery";
+import { testRender } from "../testRender";
 
 beforeAll(async () => {
   await setupDB();
