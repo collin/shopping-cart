@@ -90,7 +90,9 @@ describe("<Catalog />", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      expect(
+        within(screen.getByTitle("Products")).getAllByRole("listitem"),
+      ).toHaveLength(2);
     });
   });
 
