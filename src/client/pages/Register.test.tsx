@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Register } from "./Register";
 import { execQuery } from "../../db/execQuery";
+import { testRender } from "../testRender";
 
 describe("<Register>", () => {
   beforeEach(async () => {
@@ -13,7 +14,7 @@ describe("<Register>", () => {
   it("Takes user registration", async () => {
     // Arrange
     const user = userEvent.setup();
-    render(<Register />);
+    testRender(<Register />);
 
     // Act
     await user.type(screen.getByLabelText("Display Name"), "Test Displayname");
@@ -40,7 +41,7 @@ describe("<Register>", () => {
   describe("Display Name Input", () => {
     it("Hides error labels when fields filled out", async () => {
       // Like a user opening a web browser to /register
-      render(<Register />);
+      testRender(<Register />);
 
       const displayNameInput =
         screen.getByLabelText<HTMLInputElement>("Display Name");
@@ -58,7 +59,7 @@ describe("<Register>", () => {
 
   describe("Email Input", () => {
     it("Hides error labels when fields filled out", async () => {
-      render(<Register />);
+      testRender(<Register />);
       const emailInput = screen.getByLabelText<HTMLInputElement>("Email");
 
       expect(screen.getByText("Email address is required"));
@@ -69,7 +70,7 @@ describe("<Register>", () => {
     });
 
     it("Requires valid email address", async () => {
-      render(<Register />);
+      testRender(<Register />);
       const emailInput = screen.getByLabelText<HTMLInputElement>("Email");
 
       await userEvent.type(emailInput, "test");
@@ -81,7 +82,7 @@ describe("<Register>", () => {
 
   describe("Password Input", () => {
     it("Hides error labels when fields filled out", async () => {
-      render(<Register />);
+      testRender(<Register />);
       const passwordInput = screen.getByLabelText<HTMLInputElement>("Password");
 
       expect(screen.getByText("Password is required"));
@@ -94,7 +95,7 @@ describe("<Register>", () => {
 
   describe("Confirm Password Input", () => {
     it("Hides error labels when fields filled out", async () => {
-      render(<Register />);
+      testRender(<Register />);
       const passwordConfirmInput =
         screen.getByLabelText<HTMLInputElement>("Confirm Password");
 
@@ -108,7 +109,7 @@ describe("<Register>", () => {
     });
 
     it("Requires password confirmation to match password", async () => {
-      render(<Register />);
+      testRender(<Register />);
       await userEvent.type(screen.getByLabelText("Password"), "testpassword");
       await userEvent.type(screen.getByLabelText("Confirm Password"), "test");
       const passwordConfirmInput =

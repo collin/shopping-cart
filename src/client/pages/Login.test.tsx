@@ -1,12 +1,13 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Login } from "./Login";
+import { testRender } from "../testRender";
 
 describe("<Login>", () => {
   it("Logs in a user", async () => {
     // Arrange
     const user = userEvent.setup();
-    render(<Login />);
+    testRender(<Login />);
 
     // Act
     await userEvent.type(
@@ -28,7 +29,7 @@ describe("<Login>", () => {
   describe("Email field", () => {
     it("Hides error labels when fields filled out", async () => {
       // Like a user opening a web browser to /login
-      render(<Login />);
+      testRender(<Login />);
 
       const emailInput = screen.getByLabelText<HTMLInputElement>("Email");
 
@@ -43,7 +44,7 @@ describe("<Login>", () => {
     });
 
     it("Requires valid email address", async () => {
-      render(<Login />);
+      testRender(<Login />);
       const emailInput = screen.getByLabelText<HTMLInputElement>("Email");
 
       expect(screen.getByText("Email is required"));
@@ -58,7 +59,7 @@ describe("<Login>", () => {
 
   describe("Password field", () => {
     it("Hides error labels when fields filled out", async () => {
-      render(<Login />);
+      testRender(<Login />);
       const passwordInput = screen.getByLabelText<HTMLInputElement>("Password");
 
       expect(screen.getByText("Password is required"));

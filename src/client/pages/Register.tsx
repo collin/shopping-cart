@@ -1,12 +1,9 @@
-import { ChangeEvent, useRef, useState } from "react";
-import { RegisteredUser } from "../../server/api/user";
-import { useForceRender } from "../hooks/useForceRender";
+import { ChangeEvent, useRef } from "react";
 import { ValidatedInput } from "../components/ValidatedInput";
+import { useCurrentUser } from "../providers/CurrentUserProvider";
 
 export const Register = () => {
-  const [registeredUser, setRegisteredUser] = useState<RegisteredUser | null>(
-    null,
-  );
+  const [currentUser, setCurrentUser] = useCurrentUser();
 
   const nameInput = useRef<HTMLInputElement>(null);
   const emailInput = useRef<HTMLInputElement>(null);
@@ -25,7 +22,7 @@ export const Register = () => {
 
   return (
     <div>
-      {!registeredUser && (
+      {!currentUser && (
         <form
           aria-labelledby="registrationFormTitle"
           onSubmit={async (event) => {
@@ -60,8 +57,8 @@ export const Register = () => {
                 );
               } else {
                 // TODO: figure out how to get the response body type without asserting it
-                console.log("registration result", registeredUser);
-                setRegisteredUser(await response.json());
+                console.log("registration result", currentUser);
+                setCurrentUser(await response.json());
               }
             } catch (error) {
               console.error(error);
@@ -118,13 +115,12 @@ export const Register = () => {
         </form>
       )}
 
-      {registeredUser && (
+      {currentUser && (
         <>
           <p>
-            Hello {registeredUser.display_name}, your registration was
-            successful!
+            Hello {currentUser.display_name}, your registration was successful!
           </p>
-          <p>Your email is {registeredUser.email_address}.</p>
+          <p>Your email is {currentUser.email_address}.</p>
         </>
       )}
     </div>

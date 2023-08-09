@@ -1,18 +1,16 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { ValidatedInput } from "../components/ValidatedInput";
-import { RegisteredUser } from "../../server/api/user";
-import { useForceRender } from "../hooks/useForceRender";
+import { useCurrentUser } from "../providers/CurrentUserProvider";
 
 export const Login = () => {
-  const [authenticatedUser, setAuthenticatedUser] =
-    useState<RegisteredUser | null>(null);
+  const [currentUser, setCurrentUser] = useCurrentUser();
 
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
 
   return (
     <div>
-      {!authenticatedUser && (
+      {!currentUser && (
         <form
           aria-labelledby="loginFormTitle"
           onSubmit={async (event) => {
@@ -43,7 +41,7 @@ export const Login = () => {
               }
               const authenticatedUser = await response.json();
               console.log("LOGGED IN USER", authenticatedUser);
-              setAuthenticatedUser(authenticatedUser);
+              setCurrentUser(authenticatedUser);
             } catch (error) {
               console.log("ERROR LOGGING IN USER", error);
             }
@@ -72,10 +70,10 @@ export const Login = () => {
           <button type="submit">Login</button>
         </form>
       )}
-      {authenticatedUser && (
+      {currentUser && (
         <>
-          <p>Logged in as {authenticatedUser.display_name}</p>
-          <p>Your email is {authenticatedUser.email_address}.</p>
+          <p>Logged in as {currentUser.display_name}</p>
+          <p>Your email is {currentUser.email_address}.</p>
         </>
       )}
     </div>

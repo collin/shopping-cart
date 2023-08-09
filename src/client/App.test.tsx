@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import App from "./App";
 import { MemoryRouter } from "react-router-dom";
+import { testRender } from "./testRender";
 
 describe("Home route: /", () => {
   it("renders the home page", () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/"]}>
         <App />
       </MemoryRouter>,
@@ -16,7 +17,7 @@ describe("Home route: /", () => {
 
 describe("Catalog route: /catalog", () => {
   it("renders the catalog page", () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/catalog"]}>
         <App />
       </MemoryRouter>,
@@ -28,7 +29,7 @@ describe("Catalog route: /catalog", () => {
 
 describe("Register route: /register", () => {
   it("renders the register page", () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/register"]}>
         <App />
       </MemoryRouter>,

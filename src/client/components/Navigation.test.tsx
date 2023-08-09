@@ -1,10 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Navigation } from "./Navigation";
+import { testRender } from "../testRender";
 
 describe("Navigation links", () => {
   it("renders a link to the home page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
       </MemoryRouter>,
@@ -14,7 +15,7 @@ describe("Navigation links", () => {
   });
 
   it("renders a link to the catalog page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
       </MemoryRouter>,
@@ -24,7 +25,7 @@ describe("Navigation links", () => {
   });
 
   it("renders a link to the registration page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
       </MemoryRouter>,
