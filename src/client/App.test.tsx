@@ -1,7 +1,8 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import App from "./App";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Router, createMemoryRouter } from "react-router-dom";
 import { testRender } from "./testRender";
+import { loginAsUserId } from "./loginAsUserId";
 
 describe("Home route: /", () => {
   it("renders the home page", () => {
@@ -28,6 +29,22 @@ describe("Catalog route: /catalog", () => {
 });
 
 describe("Register route: /register", () => {
+  describe("when the user is logged in", () => {
+    it("redirects to the profile page", async () => {
+      loginAsUserId(1);
+
+      testRender(
+        <MemoryRouter initialEntries={["/register"]}>
+          <App />
+        </MemoryRouter>,
+      );
+
+      await waitFor(() => {
+        screen.getByText("Hello Test User");
+      });
+    });
+  });
+
   it("renders the register page", () => {
     testRender(
       <MemoryRouter initialEntries={["/register"]}>
@@ -36,5 +53,33 @@ describe("Register route: /register", () => {
     );
 
     screen.getByRole("heading", { name: "Register" });
+  });
+});
+
+describe("Login route: /login", () => {
+  describe("when the user is logged in", () => {
+    it("redirects to the profile page", async () => {
+      loginAsUserId(1);
+
+      testRender(
+        <MemoryRouter initialEntries={["/login"]}>
+          <App />
+        </MemoryRouter>,
+      );
+
+      await waitFor(() => {
+        screen.getByText("Hello Test User");
+      });
+    });
+  });
+
+  it("renders the login page", () => {
+    testRender(
+      <MemoryRouter initialEntries={["/login"]}>
+        <App />
+      </MemoryRouter>,
+    );
+
+    screen.getByRole("heading", { name: "Login" });
   });
 });
