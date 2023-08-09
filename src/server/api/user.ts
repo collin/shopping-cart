@@ -1,10 +1,11 @@
 import crypto, { BinaryLike } from "node:crypto";
 import { sign } from "jsonwebtoken";
-import { Router } from "express";
+import { NextFunction, Response, Router } from "express";
 import { catchAsyncError } from "../catchAsyncError";
 import { execQuery } from "../../db/execQuery";
 import { z } from "zod";
 import Users from "../../types/users/Users";
+import { authRequired } from "../authRequired";
 
 const scryptPromise = (
   password: BinaryLike,
@@ -38,7 +39,8 @@ if (!process.env.JWT_SESSION_SECRET) {
   throw new Error("JWT_SESSION_SECRET not set");
 }
 
-const JWT_SESSION_SECRET = process.env.JWT_SESSION_SECRET;
+export const JWT_SESSION_SECRET = process.env.JWT_SESSION_SECRET;
+export const AUTH_COOKIE_NAME = "auth";
 
 userRouter.post(
   "/register",
@@ -69,7 +71,7 @@ userRouter.post(
       subject: user.id,
     });
 
-    res.cookie("token", token, {
+    res.cookie(AUTH_COOKIE_NAME, token, {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
     });
@@ -113,7 +115,7 @@ userRouter.post(
       subject: user.id,
     });
 
-    res.cookie("token", token, {
+    res.cookie(AUTH_COOKIE_NAME, token, {
       maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
     });
@@ -125,5 +127,32 @@ userRouter.post(
       display_name: user.display_name,
       email_address: user.email_address,
     });
+  }),
+);
+
+userRouter.get(
+  "/me",
+  catchAsyncError(async (req, res) => {
+    const userId = authRequired(req);
+    const {
+      rows: [user],
+    } = await execQuery<RegisteredUser>(
+      /* SQL */ `
+        select id, email_address, display_name
+        from users.users
+        where id = $1
+      `,
+      [userId],
+    );
+
+    res.json(user);
+  }),
+);
+
+userRouter.post(
+  "/logout",
+  catchAsyncError(async (req, res) => {
+    res.clearCookie(AUTH_COOKIE_NAME);
+    res.json({ success: true });
   }),
 );
