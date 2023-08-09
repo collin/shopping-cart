@@ -1,23 +1,24 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Navigation } from "./Navigation";
+import { testRender } from "../testRender";
 
 describe("Navigation links", () => {
   it("renders a link to the home page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByRole("link", { name: "Home" });
   });
 
   it("renders a link to the catalog page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByRole("link", { name: "Catalog" });
