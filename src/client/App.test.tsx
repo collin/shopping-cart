@@ -4,10 +4,10 @@ import { MemoryRouter } from "react-router-dom";
 
 describe("Home route: /", () => {
   it("renders the home page", () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/"]}>
         <App />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByText("Homepage");
@@ -16,10 +16,10 @@ describe("Home route: /", () => {
 
 describe("Catalog route: /catalog", () => {
   it("renders the catalog page", () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/catalog"]}>
         <App />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByText("Catalogpage");

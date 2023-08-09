@@ -4,20 +4,20 @@ import { Navigation } from "./Navigation";
 
 describe("Navigation links", () => {
   it("renders a link to the home page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByRole("link", { name: "Home" });
   });
 
   it("renders a link to the catalog page", () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Navigation />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     screen.getByRole("link", { name: "Catalog" });

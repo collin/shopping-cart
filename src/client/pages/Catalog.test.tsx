@@ -48,7 +48,7 @@ beforeAll(() => {
 describe("<Catalog />", () => {
   describe("Categories", () => {
     it("Renders all categories in the catalog", async () => {
-      render(
+      testRender(
         <MemoryRouter>
           <Catalog />
         </MemoryRouter>,
@@ -63,7 +63,7 @@ describe("<Catalog />", () => {
     });
 
     it("Indicates which category is currently viewed", async () => {
-      render(
+      testRender(
         <MemoryRouter initialEntries={["/?categoryId=1"]}>
           <Catalog />
         </MemoryRouter>,
@@ -75,7 +75,7 @@ describe("<Catalog />", () => {
     });
 
     it("Renders the products in the selected category", async () => {
-      render(
+      testRender(
         <MemoryRouter initialEntries={["/?categoryId=1"]}>
           <Catalog />
         </MemoryRouter>,
@@ -90,7 +90,7 @@ describe("<Catalog />", () => {
     });
 
     it("Navigates to the selected category when clicked", async () => {
-      render(
+      testRender(
         <MemoryRouter>
           <Catalog />
         </MemoryRouter>,
@@ -110,7 +110,7 @@ describe("<Catalog />", () => {
   });
 
   it("renders all products in the catalog", async () => {
-    render(
+    testRender(
       <MemoryRouter>
         <Catalog />
       </MemoryRouter>,
@@ -125,7 +125,7 @@ describe("<Catalog />", () => {
   });
 
   it("renders the page size of products", async () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/?pageSize=2"]}>
         <Catalog />
       </MemoryRouter>,
@@ -137,7 +137,7 @@ describe("<Catalog />", () => {
   });
 
   it("renders the requested page of products", async () => {
-    render(
+    testRender(
       <MemoryRouter initialEntries={["/?pageSize=2&page=2"]}>
         <Catalog />
       </MemoryRouter>,
@@ -152,7 +152,7 @@ describe("<Catalog />", () => {
 
   describe("Page controls", () => {
     it("renders the next page of products when requested", async () => {
-      render(
+      testRender(
         <MemoryRouter initialEntries={["/?pageSize=2"]}>
           <Catalog />
         </MemoryRouter>,
@@ -172,7 +172,7 @@ describe("<Catalog />", () => {
     });
 
     it("renders the previous page of products when requested", async () => {
-      render(
+      testRender(
         <MemoryRouter initialEntries={["/?pageSize=2&page=2"]}>
           <Catalog />
         </MemoryRouter>,
@@ -192,7 +192,7 @@ describe("<Catalog />", () => {
     });
 
     it("hides the previous page link on the first page", async () => {
-      render(
+      testRender(
         <MemoryRouter initialEntries={["/?page=1"]}>
           <Catalog />
         </MemoryRouter>,
@@ -205,7 +205,7 @@ describe("<Catalog />", () => {
     });
 
     it("shows the next page link on pages after the first", async () => {
-      render(
+      testRender(
         <MemoryRouter initialEntries={["/?page=2"]}>
           <Catalog />
         </MemoryRouter>,
@@ -219,7 +219,7 @@ describe("<Catalog />", () => {
 
     describe("First page controls", () => {
       it("hides the first page link on the first page", async () => {
-        render(
+        testRender(
           <MemoryRouter initialEntries={["/?page=1"]}>
             <Catalog />
           </MemoryRouter>,
@@ -231,7 +231,7 @@ describe("<Catalog />", () => {
       });
 
       it("hides the first page link on the second page", async () => {
-        render(
+        testRender(
           <MemoryRouter initialEntries={["/?page=2"]}>
             <Catalog />
           </MemoryRouter>,
@@ -243,7 +243,7 @@ describe("<Catalog />", () => {
       });
 
       it("shows the first page link on pages after the second", async () => {
-        render(
+        testRender(
           <MemoryRouter initialEntries={["/?page=3"]}>
             <Catalog />
           </MemoryRouter>,
@@ -255,7 +255,7 @@ describe("<Catalog />", () => {
       });
 
       it("goes to the first page when the first page link is clicked", async () => {
-        render(
+        testRender(
           <MemoryRouter initialEntries={["/?page=3"]}>
             <Catalog />
           </MemoryRouter>,
@@ -272,7 +272,7 @@ describe("<Catalog />", () => {
       });
 
       it("retains the categoryId when switching pages", async () => {
-        render(
+        testRender(
           <MemoryRouter initialEntries={["/?categoryId=1&page=3"]}>
             <Catalog />
           </MemoryRouter>,
