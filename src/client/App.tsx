@@ -18,6 +18,16 @@ const RedirectToProfileIfLoggedIn = () => {
   return <Outlet />;
 };
 
+const RederictToLoginIfNotLoggedIn = () => {
+  const [currentUser] = useCurrentUser();
+
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Outlet />;
+};
+
 function App() {
   return (
     <div className="App">
@@ -26,7 +36,9 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/catalog" element={<Catalog />} />
 
-        <Route path="/profile" element={<Profile />} />
+        <Route element={<RederictToLoginIfNotLoggedIn />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
 
         <Route element={<RedirectToProfileIfLoggedIn />}>
           <Route path="/register" element={<Register />} />

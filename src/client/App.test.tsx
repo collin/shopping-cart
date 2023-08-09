@@ -56,6 +56,38 @@ describe("Register route: /register", () => {
   });
 });
 
+describe("Profile route: /profile", () => {
+  describe("when the user is logged in", () => {
+    it("renders the profile page", async () => {
+      loginAsUserId(1);
+
+      testRender(
+        <MemoryRouter initialEntries={["/profile"]}>
+          <App />
+        </MemoryRouter>,
+      );
+
+      await waitFor(() => {
+        screen.getByText("Hello Test User");
+      });
+    });
+  });
+
+  describe("when the user is not logged in", () => {
+    it("redirects to the login page", async () => {
+      testRender(
+        <MemoryRouter initialEntries={["/profile"]}>
+          <App />
+        </MemoryRouter>,
+      );
+
+      await waitFor(() => {
+        screen.getByRole("heading", { name: "Login" });
+      });
+    });
+  });
+});
+
 describe("Login route: /login", () => {
   describe("when the user is logged in", () => {
     it("redirects to the profile page", async () => {
