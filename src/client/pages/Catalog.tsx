@@ -26,7 +26,7 @@ export const Catalog = () => {
         const products = await response.json();
         setProducts(products);
       } catch (error) {
-        console.log("ERROR FETCHING PRODUCTS");
+        console.log("ERROR FETCHING PRODUCTS", error);
       }
     };
     fetchProducts();
@@ -39,7 +39,7 @@ export const Catalog = () => {
         const categories = await response.json();
         setCategories(categories);
       } catch (error) {
-        console.log("ERROR FETCHING CATEGORIES");
+        console.log("ERROR FETCHING CATEGORIES", error);
       }
     };
     fetchCategories();
