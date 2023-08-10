@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import request from "supertest";
-import { app } from "./server/app";
+import { app } from "../server/app";
 
 // TODO: consider this a unit for testing
 const server = setupServer(

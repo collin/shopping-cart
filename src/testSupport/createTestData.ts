@@ -1,10 +1,8 @@
-import { execQuery } from "./db/execQuery";
-import { seedUser } from "./db/seeds/seedUsers";
-import { setupDB } from "./db/setupDB";
+import { execQuery } from "../db/execQuery";
+import { seedUser } from "../db/seeds/seedUsers";
+import { setupDB } from "../db/setupDB";
 
 export default async () => {
-  const TEST_PORT = 3000;
-
   await setupDB();
   await execQuery(/* SQL */ `
         insert into store.products (title, description, price)
